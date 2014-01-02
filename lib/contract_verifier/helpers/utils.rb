@@ -11,4 +11,8 @@ module Utils
   def file_present?(file)
     File.exist? file
   end
+
+  def yellow(string)
+    "\e[#{33}m#{string}\e[0m"
+  end
 end

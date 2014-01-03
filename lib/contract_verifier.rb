@@ -15,16 +15,20 @@ module ContractVerifier
           yaml_file = stub_root +'/'+ opts[:yml_file]
           service_port = opts[:service_port]
           contract = ContractSchemaValidator::Contract.new(stub_root, service_port)
-          url ||= "http://localhost:#{service_port}/#{context}/?_wadl"
-          full_schema ||= JSON.parse(Net::HTTP.get(URI(url)))
+          url = "http://localhost:#{service_port}#{context}/?_wadl"
+          full_schema = JSON.parse(Net::HTTP.get(URI(url)))
           service_entries=YAML.load_file(yaml_file)
           full_schema['resources'].each do |resource|
-            get_url = (full_schema['base_url'] + resource['resource']['path']).gsub("http://localhost:9090", '')
+            get_url = (context + resource['resource']['path'])
             entry = service_entries.select do |key, hash|
               key["request"]["url"] == get_url
             end
+            if entry.length > 1
+              puts yellow("Multiple declaration found for request pattern : #{entry.first['request']['url']} in #{yaml_file}")
+              return
+            end
             entry = entry.first
-            it("Contract test for #{stub_root} -- #{entry['request']['url']}") do
+            it("Contract test for #{entry['request']['url']}") do
               contract.validate entry
             end
             entry['in_wadl'] = true

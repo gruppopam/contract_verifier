@@ -18,16 +18,14 @@ module ContractSchemaValidator
 
     def validate(entry)
       begin
-        consumer_schema = schema_file_name entry['request']['file']
-        unless file_present? consumer_schema
-          raise PendingDeclaredInExample.new("Schema Undefined")
+        if entry['request']['file'].is_a?(Hash)
+            entry['request']['file'].each do |key,value|
+               validate_consumer_schema entry,value
+            end
+        else
+          validate_consumer_schema entry, entry['request']['file']
         end
-        provider_schema = construct_url_for(entry['request']['url'])
-        should verify_response(consumer_schema, provider_schema)
 
-        if entry['request']['method'] == POST
-          should verify_request(consumer_schema, provider_schema)
-        end
       rescue JSON::ParserError => e
         puts entry['request']['file'].bold.red
         puts e.backtrace
@@ -35,6 +33,18 @@ module ContractSchemaValidator
       end
     end
 
+    def validate_consumer_schema(entry, schema_file)
+      consumer_schema = schema_file_name schema_file
+      unless file_present? consumer_schema
+        raise PendingDeclaredInExample.new("Schema Undefined")
+      end
+      provider_schema = construct_url_for(entry['request']['url'])
+      should verify_response(consumer_schema, provider_schema)
+
+      if entry['request']['method'] == POST
+        should verify_request(consumer_schema, provider_schema)
+      end
+    end
 
     def construct_url_for(input_url)
       input_url = input_url.gsub('{','').gsub('}','')

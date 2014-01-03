@@ -45,12 +45,13 @@ module ContractVerifier
 
         def validate_stub_for(opts)
           stub_root = opts[:stub_root]
-          yaml_file = stub_root +'/'+ opts[:yml_file]
-          contract = StubSchemaValidator::StubVerifier.new(stub_root)
+          data_root = opts[:data_root]
+          yaml_file = data_root +'/'+ opts[:yml_file]
+          contract = StubSchemaValidator::StubVerifier.new(stub_root,data_root)
           service_entries=YAML.load_file(yaml_file)
           service_entries.each do |entry|
             it("Stub schema verifier for #{opts[:yml_file]} -- #{entry['request']['url']}") do
-              contract.validate entry, 'GET'
+              contract.validate entry
             end
           end
         end

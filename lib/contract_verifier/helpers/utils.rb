@@ -5,7 +5,7 @@ module Utils
   end
 
   def data_file_name(file_name)
-    @stub_root+'/'+file_name
+    @data_root+"/#{file_name}"
   end
 
   def file_present?(file)

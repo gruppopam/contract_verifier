@@ -25,7 +25,10 @@ module ContractVerifier
             end
             if entry.length > 1
               puts yellow("Multiple declaration found for request pattern : #{entry.first['request']['url']} in #{yaml_file}")
-              return
+              next
+            elsif entry.empty?
+              puts yellow("Resource not defined for: #{get_url} in #{yaml_file}")
+              next
             end
             entry = entry.first
             it("Contract test for #{entry['request']['url']}") do

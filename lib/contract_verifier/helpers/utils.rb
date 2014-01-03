@@ -9,7 +9,7 @@ module Utils
   end
 
   def file_present?(file)
-    File.exist? file
+    File.file? file and File.exist? file
   end
 
   def yellow(string)

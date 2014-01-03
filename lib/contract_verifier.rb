@@ -24,10 +24,10 @@ module ContractVerifier
               key["request"]["url"] == get_url
             end
             if entry.length > 1
-              puts yellow("Multiple declaration found for request pattern : #{entry.first['request']['url']} in #{yaml_file}")
+               pending"Multiple declaration found for request pattern : #{entry.first['request']['url']} in #{yaml_file}"
               next
             elsif entry.empty?
-              puts yellow("Resource not defined for: #{get_url} in #{yaml_file}")
+              pending "Resource not defined for: #{get_url} in #{yaml_file}"
               next
             end
             entry = entry.first
@@ -38,7 +38,7 @@ module ContractVerifier
           end
           service_entries.each do |entry|
             unless entry.has_key?('in_wadl')
-              puts yellow("Service removed #{entry['request']}")
+               pending("Service removed #{entry['request']}")
             end
           end
         end

@@ -15,4 +15,8 @@ module Utils
   def yellow(string)
     "\e[#{33}m#{string}\e[0m"
   end
+
+  def red(string)
+    "\e[#{31}m#{string}\e[0m"
+  end
 end

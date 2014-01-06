@@ -1,4 +1,5 @@
 require "contract_verifier/version"
+require 'artii'
 Dir[File.join(File.dirname(__FILE__), "contract_verifier/helpers/*.rb")].each { |file| require file }
 Dir[File.join(File.dirname(__FILE__), "contract_verifier/matchers/*.rb")].sort!.each { |file| require file }
 
@@ -6,8 +7,12 @@ module ContractVerifier
   module RSpec
     module ContractMatcher
       module ClassMethods
-
         include Utils
+        include Artii
+
+        artii = Artii::Base.new
+        puts artii.asciify('Contract Tests')
+        STDOUT.flush
 
         def validate_contract_for_yml(opts)
           stub_root = opts[:stub_root]
@@ -24,10 +29,14 @@ module ContractVerifier
               key["request"]["url"] == get_url
             end
             if entry.length > 1
-               pending"Multiple declaration found for request pattern : #{entry.first['request']['url']} in #{yaml_file}"
+              it 'Multiple declaration Found' do
+                pending "For request pattern : #{entry.first['request']['url']} in #{yaml_file}"
+              end
               next
             elsif entry.empty?
-              pending "Resource not defined for: #{get_url} in #{yaml_file}"
+              it 'Resource not defined ' do
+                pending "for: #{get_url} in #{yaml_file}"
+              end
               next
             end
             entry = entry.first
@@ -38,16 +47,19 @@ module ContractVerifier
           end
           service_entries.each do |entry|
             unless entry.has_key?('in_wadl')
-               pending("Service removed #{entry['request']}")
+              pending("Service removed #{entry['request']}")
             end
           end
+        rescue Errno::ECONNREFUSED => e
+          puts red("Service is not running in the port #{service_port}".capitalize)
+          raise e
         end
 
         def validate_stub_for(opts)
           stub_root = opts[:stub_root]
           data_root = opts[:data_root]
           yaml_file = data_root +'/'+ opts[:yml_file]
-          contract = StubSchemaValidator::StubVerifier.new(stub_root,data_root)
+          contract = StubSchemaValidator::StubVerifier.new(stub_root, data_root)
           service_entries=YAML.load_file(yaml_file)
           service_entries.each do |entry|
             it("Stub schema verifier for #{opts[:yml_file]} -- #{entry['request']['url']}") do

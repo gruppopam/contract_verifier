@@ -1,9 +1,10 @@
 require 'rspec/expectations'
 
-RSpec::Matchers.define :verify_response do |consumer_schema, provider_schema|
+RSpec::Matchers.define :verify_response do |consumer_schema, provider_schema, http_method, service_port|
   result = nil
   match do |matcher|
-    provider_json = JSON.parse(Net::HTTP.get(URI(provider_schema)))['response']
+    request_body = create_request(service_port, http_method, provider_schema)
+    provider_json = JSON.parse(request_body)['response']
     consumer_json = JSON.parse(open(consumer_schema).read)['response']
     diff =HashDiff.best_diff(provider_json, consumer_json)
     result = check_errors(diff)
@@ -14,10 +15,11 @@ RSpec::Matchers.define :verify_response do |consumer_schema, provider_schema|
   end
 end
 
-RSpec::Matchers.define :verify_request do |consumer_schema, provider_schema|
+RSpec::Matchers.define :verify_request do |consumer_schema, provider_schema, http_method, service_port|
   result = nil
   match do |matcher|
-    provider_json = JSON.parse(Net::HTTP.get(URI(provider_schema)))['request']
+    request_body = create_request(service_port, http_method, provider_schema)
+    provider_json = JSON.parse(request_body)['request']
     consumer_json = JSON.parse(open(consumer_schema).read)['request']
     diff =HashDiff.best_diff(provider_json, consumer_json)
     result = check_errors(diff)
@@ -51,5 +53,14 @@ def check_errors(array)
     match_properties = x[1].match('items.properties./[a-z_]+/.')
     x.first == '-' && !match_properties.present?
   end
+end
+
+def create_request(service_port, http_method, path)
+  http = Net::HTTP.new('localhost', service_port)
+  http.send_request(http_method.upcase, path).body
+
+rescue Errno::ECONNREFUSED => e
+  puts red("Invalid end point : http://localhost:#{service_port}#{path}")
+  raise e
 end
 

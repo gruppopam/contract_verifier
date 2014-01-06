@@ -19,9 +19,9 @@ module ContractSchemaValidator
     def validate(entry)
       begin
         if entry['request']['file'].is_a?(Hash)
-            entry['request']['file'].each do |key,value|
-               validate_consumer_schema entry,value
-            end
+          entry['request']['file'].each do |key,value|
+            validate_consumer_schema entry,value
+          end
         else
           validate_consumer_schema entry, entry['request']['file']
         end
@@ -38,22 +38,23 @@ module ContractSchemaValidator
       unless file_present? consumer_schema
         raise PendingDeclaredInExample.new("Schema Undefined")
       end
-      provider_schema = construct_url_for(entry['request']['url'])
-      should verify_response(consumer_schema, provider_schema)
+      provider_schema = construct_path_for(entry['request']['url'])
+      http_method = entry['request']['method']
+      should verify_response(consumer_schema, provider_schema, http_method, @service_port)
 
-      if entry['request']['method'] == POST
-        should verify_request(consumer_schema, provider_schema)
+      if http_method == POST
+        should verify_request(consumer_schema, provider_schema, http_method, @service_port)
       end
     end
 
-    def construct_url_for(input_url)
+    def construct_path_for(input_url)
       input_url = input_url.gsub('{','').gsub('}','')
       url_pattern_with_regex = /\[.*\]/
       if input_url.match(url_pattern_with_regex)
         head = url.split("/")[0...-1].join("/")
         input_url = "#{head}/path_param_substituted.json"
       end
-      "http://localhost:#{@service_port}#{input_url}?_wadl"
+      "#{input_url}?_wadl"
     rescue => e
       puts "Invalid URL: #{input_url}".bold.red
       raise e

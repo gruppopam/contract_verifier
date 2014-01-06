@@ -19,10 +19,7 @@ RSpec::Matchers.define :verify_request do |consumer_schema, provider_schema|
   match do |matcher|
     provider_json = JSON.parse(Net::HTTP.get(URI(provider_schema)))['request']
     consumer_json = JSON.parse(open(consumer_schema).read)['request']
-    pp provider_json
-    pp consumer_json
     diff =HashDiff.best_diff(provider_json, consumer_json)
-    pp diff if diff.present?
     result = check_errors(diff)
     result.blank?
   end

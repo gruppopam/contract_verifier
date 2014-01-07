@@ -1,4 +1,5 @@
 require 'rspec/expectations'
+require 'HashDiff'
 
 RSpec::Matchers.define :verify_response do |consumer_schema, provider_schema, http_method, service_port|
   result = nil

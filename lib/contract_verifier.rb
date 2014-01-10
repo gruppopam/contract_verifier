@@ -1,5 +1,4 @@
 require "contract_verifier/version"
-require 'artii'
 Dir[File.join(File.dirname(__FILE__), "contract_verifier/helpers/*.rb")].each { |file| require file }
 Dir[File.join(File.dirname(__FILE__), "contract_verifier/matchers/*.rb")].sort!.each { |file| require file }
 
@@ -8,12 +7,7 @@ module ContractVerifier
     module ContractMatcher
       module ClassMethods
         include Utils
-        include Artii
-
-        artii = Artii::Base.new
-        puts artii.asciify('Contract Tests')
-        STDOUT.flush
-
+        
         def validate_contract_for_yml(opts)
           stub_root = opts[:stub_root]
           context = opts[:context_path]

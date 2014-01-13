@@ -1,4 +1,5 @@
 require_relative 'utils'
+
 module StubSchemaValidator
   class StubVerifier
     include Utils

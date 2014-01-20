@@ -1,4 +1,4 @@
-Copyright (c) 2014 Sairam
+Copyright (c) 2014 Marco Bon
 
 MIT License
 

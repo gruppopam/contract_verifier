@@ -49,12 +49,12 @@ module ContractVerifier
             end
             if entry.length > 1
               it 'Multiple declaration Found' do
-                pending "For request pattern : #{entry.first['request']['url']} in #{yaml_file}"
+                fail "For request pattern : #{entry.first['request']['url']} in #{yaml_file}"
               end
               next
             elsif entry.empty?
               it 'Resource not defined ' do
-                pending "for: #{get_url} in #{yaml_file}"
+                fail("for: #{get_url} in #{yaml_file}")
               end
               next
             end
@@ -70,7 +70,7 @@ module ContractVerifier
           service_entries.each do |entry|
             unless entry.has_key?('in_wadl')
               it "service removed" do
-                pending("Service removed #{entry['request']}")
+                fail("Service removed #{entry['request']}")
               end
             end
           end

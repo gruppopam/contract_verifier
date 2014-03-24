@@ -42,8 +42,11 @@ module ContractVerifier
         private
 
         def handle_for_resource(context, contract, full_schema, service_entries, yaml_file)
+          base_path = full_schema['base_url'].rpartition('/')[2]
+          base_path = '/' + base_path unless base_path.empty?
+
           full_schema['resources'].each do |resource|
-            get_url = (context + resource['resource']['path'])
+            get_url = ( base_path + resource['resource']['path'])
             entry = service_entries.select do |key, hash|
               key["request"]["url"] == get_url and key["request"]["method"] == resource["resource"]["method"]
             end

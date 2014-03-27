@@ -42,13 +42,13 @@ module ContractVerifier
         private
 
         def handle_for_resource(context, contract, full_schema, service_entries, yaml_file)
-          base_path = full_schema['base_url'].rpartition('/')[2]
+          base_path = URI.parse(full_schema['base_url']).request_uri.gsub(/\/+/, '/')
           base_path = '/' + base_path unless base_path.empty?
-
+          base_path = "#{base_path}/" unless base_path.end_with? '/'
           full_schema['resources'].each do |resource|
-            get_url = ( base_path + resource['resource']['path'])
+            get_url = (base_path + resource['resource']['path'])
             entry = service_entries.select do |key, hash|
-              key["request"]["url"] == get_url and key["request"]["method"] == resource["resource"]["method"]
+              key["request"]["url"].gsub(/\/+/, '/') == get_url.gsub(/\/+/, '/') and key["request"]["method"] == resource["resource"]["method"]
             end
             if entry.length > 1
               it 'Multiple declaration Found' do

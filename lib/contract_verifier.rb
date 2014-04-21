@@ -60,6 +60,12 @@ module ContractVerifier
                 fail("for: #{get_url} in #{yaml_file}")
               end
               next
+            elsif entry.first['request']['exclude']
+              it 'Excluding resource' do
+                pending("excluding : #{get_url} in #{yaml_file}")
+              end
+              entry.first['in_wadl'] = true
+              next
             end
             entry = entry.first
             it("Contract test for #{entry['request']['url']}") do

@@ -3,7 +3,7 @@ require_relative 'utils'
 
 module ContractSchemaValidator
   class Contract
-    include Utils
+    include ContractVerifier::Utils
     include RSpec::Matchers
     include RSpec::Core::Pending
 

@@ -19,7 +19,7 @@ module StubSchemaValidator
           end
           consumer_schema = schema_file_name entry['response']['schema']
           unless file_present? consumer_schema
-            raise PendingDeclaredInExample.new("Schema Undefined")
+            raise "Schema Undefined/File not present - #{consumer_schema}"
           end
           consumer_data = data_file_name entry['response']['file']
           should verify_get_contract(consumer_schema, consumer_data)

@@ -13,6 +13,7 @@ module ContractSchemaValidator
 
     GET = 'GET'
     POST = 'POST'
+    PUT = 'PUT'
 
     def validate(entry)
       begin
@@ -40,7 +41,7 @@ module ContractSchemaValidator
       http_method = entry['request']['method']
       should verify_response(consumer_schema, provider_schema, http_method, @service_port)
 
-      if http_method == POST
+      if http_method == POST || http_method == PUT
         should verify_request(consumer_schema, provider_schema, http_method, @service_port)
       end
     end

@@ -1,10 +1,11 @@
 require 'rspec/expectations'
+include ContractVerifier::Utils
 
-RSpec::Matchers.define :verify_get_contract do |consumer_schema, consumer_data|
+RSpec::Matchers.define :verify_contract do |consumer_schema, consumer_data, key|
   match do |matcher|
     begin
-      schema = JSON.parse(open(consumer_schema).read)['response']
-      data = JSON.parse(open(consumer_data).read)
+      schema = JSON.parse(open(consumer_schema).read)[key]
+      file_present?(consumer_data.to_s) ? data = JSON.parse(open(consumer_data).read) : data = consumer_data
       JSON::Schema.validate(data, schema, {:additional_properties => false})
     rescue JSON::Schema::ValueError => e
       raise "please check files #{consumer_schema} and #{consumer_data} : #{e}"
@@ -12,15 +13,3 @@ RSpec::Matchers.define :verify_get_contract do |consumer_schema, consumer_data|
   end
 end
 
-
-RSpec::Matchers.define :verify_post_contract do |consumer_schema, consumer_data|
-  match do |matcher|
-    begin
-      schema = JSON.parse(open(consumer_schema).read)['request'].first
-      data = JSON.parse(open(consumer_data).read)
-      JSON::Schema.validate(data, schema, {:additional_properties => {}})
-    rescue JSON::Schema::ValueError
-      puts "Error in request body".capitalize.bold.red
-    end
-  end
-end

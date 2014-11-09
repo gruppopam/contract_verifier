@@ -13,29 +13,13 @@ module StubSchemaValidator
     end
 
     def validate(entry)
-
       begin
-        key = 'response'
+        key = entry['request']['method'] == 'GET' ? 'response' : 'request'
         consumer_data = data_file_name_for(entry, key)
         consumer_schema = schema_file_name(entry, key)
-        should verify_contract(consumer_schema, consumer_data, key) unless (consumer_schema.nil? or consumer_data.nil?)
-
-        unless entry['request']['method'] == 'GET'
-          key = 'request'
-          consumer_data = data_file_name_for(entry, key)
-          consumer_schema = schema_file_name(entry, key)
-          should verify_contract(consumer_schema, consumer_data, key) unless (consumer_schema.nil? or consumer_data.nil?)
-        end
-
-        return true if consumer_data.nil?
-
-        actual_file_url = entry['request']['url'].gsub('$','').gsub('^','')
-
-        actual_file_url.should match_url_in_schema consumer_schema
+        should verify_contract(consumer_schema, consumer_data, key) unless consumer_schema.nil?
       end
-
     end
-
   end
 end
 

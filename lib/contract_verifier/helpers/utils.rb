@@ -12,7 +12,9 @@ module ContractVerifier
       response_body = entry[key]['body']
       response = response_file || response_body
       if response.nil?
-        return nil
+        if key == 'response'
+          raise "Data Undefined/File not present - #{consumer(entry)}"
+        end
       else
         response_body.nil? ? @data_root+"/#{response_file}" : response_body
       end

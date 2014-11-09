@@ -20,8 +20,8 @@ module ContractSchemaValidator
     def validate(entry)
       begin
         if entry['request']['file'].is_a?(Hash)
-          entry['request']['file'].each do |key,value|
-            validate_consumer_schema entry,value
+          entry['request']['file'].each do |key, value|
+            validate_consumer_schema entry, value
           end
         else
           validate_consumer_schema entry, entry['request']['file']
@@ -35,7 +35,7 @@ module ContractSchemaValidator
     end
 
     def validate_consumer_schema(entry, schema_file)
-      consumer_schema = schema_file_name schema_file
+      consumer_schema = schema_name schema_file
       unless file_present? consumer_schema
         raise PendingDeclaredInExample.new("Schema Undefined")
       end
@@ -49,7 +49,7 @@ module ContractSchemaValidator
     end
 
     def construct_path_for(input_url)
-      input_url = input_url.gsub('{','').gsub('}','')
+      input_url = input_url.gsub('{', '').gsub('}', '')
       url_pattern_with_regex = /\[.*\]/
       if input_url.match(url_pattern_with_regex)
         head = url.split("/")[0...-1].join("/")

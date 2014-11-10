@@ -22,11 +22,7 @@ module ContractVerifier
 
     def schema_file_name(entry, key)
       file_name = entry['response']['schema']
-      if file_name.nil?
-        unless data_file_name_for(entry, key).nil?
-          raise "Schema Undefined/File not present - #{consumer(entry)}"
-        end
-      else
+      unless file_name.nil?
         @stub_root+"/#{file_name}"
       end
     end

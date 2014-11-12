@@ -12,12 +12,24 @@ module StubSchemaValidator
     end
 
     def validate(entry)
+
       begin
-        key = entry['request']['method'] == 'GET' ? 'response' : 'request'
+        key = 'response'
         consumer_data = data_file_name_for(entry, key)
         consumer_schema = schema_file_name(entry, key)
-        should verify_contract(consumer_schema, consumer_data, key) unless consumer_schema.nil?
+        should verify_contract(consumer_schema, consumer_data, key) unless (consumer_schema.nil? or consumer_data.nil?)
+
+        unless entry['request']['method'] == 'GET'
+          key = 'request'
+          consumer_data = data_file_name_for(entry, key)
+          consumer_schema = schema_file_name(entry, key)
+          should verify_contract(consumer_schema, consumer_data, key) unless (consumer_schema.nil? or consumer_data.nil?)
+        end
       end
+
     end
+
   end
 end
+
+

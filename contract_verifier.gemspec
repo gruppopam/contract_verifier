@@ -32,5 +32,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rspec-core'
   spec.add_dependency 'artii'
   spec.add_dependency 'sprockets-rails', '>= 2.1.0', '< 4.0'
-
 end

@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rspec-rails', '~> 2.14.0'
   spec.add_dependency 'rspec-core'
   spec.add_dependency 'artii'
+  spec.add_dependency 'rspec'
 
 
 end

@@ -1,6 +1,18 @@
-module UrlMatcher 
+require 'rspec/expectations'
+module Url
   extend self
-  
+
+  RSpec::Matchers.define :match_schema do |schema_file|
+    schema_url = JSON.parse(open(schema_file).read)['path']
+    match do |url|
+      Url.match? schema_url, url
+    end
+
+    failure_message_for_should do |url|
+      "expected url #{url} does not match schema url #{schema_url}. Update schema file in #{schema_file}"
+    end
+
+  end
 
   def match? pattern,url
     regex_pattern = replace_placeholders_with_regex pattern
@@ -18,3 +30,5 @@ module UrlMatcher
   end
 
 end
+
+

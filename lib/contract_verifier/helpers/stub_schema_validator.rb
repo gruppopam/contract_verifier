@@ -1,4 +1,5 @@
 require_relative 'utils'
+require_relative '../matchers/url_matcher'
 
 module StubSchemaValidator
   class StubVerifier
@@ -25,6 +26,10 @@ module StubSchemaValidator
           consumer_schema = schema_file_name(entry, key)
           should verify_contract(consumer_schema, consumer_data, key) unless (consumer_schema.nil? or consumer_data.nil?)
         end
+        actual_file_url = entry['request']['url'].gsub('$','').gsub('^','')
+
+
+        actual_file_url.should match_schema consumer_schema
       end
 
     end

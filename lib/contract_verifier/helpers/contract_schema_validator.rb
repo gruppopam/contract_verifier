@@ -17,14 +17,14 @@ module ContractSchemaValidator
     POST = 'POST'
     PUT = 'PUT'
 
-    def validate(entry)
+    def validate(entry, context)
       begin
         if entry['request']['file'].is_a?(Hash)
           entry['request']['file'].each do |key, value|
-            validate_consumer_schema entry, value
+            validate_consumer_schema entry, value, context
           end
         else
-          validate_consumer_schema entry, entry['request']['file']
+          validate_consumer_schema entry, entry['request']['file'], context
         end
 
       rescue JSON::ParserError => e
@@ -34,7 +34,7 @@ module ContractSchemaValidator
       end
     end
 
-    def validate_consumer_schema(entry, schema_file)
+    def validate_consumer_schema(entry, schema_file, context)
       consumer_schema = schema_name schema_file
       unless file_present? consumer_schema
         raise PendingDeclaredInExample.new("Schema Undefined")
@@ -46,7 +46,7 @@ module ContractSchemaValidator
       if http_method == POST || http_method == PUT
         should verify_request(consumer_schema, provider_schema, http_method, @service_port)
       end
-      expect(JSON.parse(open(consumer_schema).read)['path']).to eq (entry['request']['url'])
+      expect("#{context}#{JSON.parse(open(consumer_schema).read)['path']}").to eq (entry['request']['url'])
     end
 
     def construct_path_for(input_url)

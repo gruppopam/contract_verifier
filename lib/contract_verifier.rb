@@ -69,7 +69,7 @@ module ContractVerifier
             end
             entry = entry.first
             it("Contract test for #{entry['request']['url']}") do
-              contract.validate entry
+              contract.validate entry, context
             end
             entry['in_wadl'] = true
           end

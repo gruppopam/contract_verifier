@@ -14,11 +14,13 @@ module ContractVerifier
           context = opts[:context_path]
           yaml_file = stub_root +'/'+ opts[:yml_file]
           service_port = opts[:service_port]
+          context_missing_in_schema_url = opts[:context_missing_in_schema_url]
+          context_missing_in_schema_url= true if context_missing_in_schema_url.nil? == true
           contract = ContractSchemaValidator::Contract.new(stub_root, service_port)
           url = "http://localhost:#{service_port}#{context}/?_wadl"
           full_schema = JSON.parse(Net::HTTP.get(URI(url)))
           service_entries=YAML.load_file(yaml_file)
-          handle_for_resource(context, contract, full_schema, service_entries, yaml_file)
+          handle_for_resource(context, contract, full_schema, service_entries, yaml_file,context_missing_in_schema_url)
           handle_removed_end_points(service_entries)
         rescue Errno::ECONNREFUSED => e
           puts red("Service is not running in the port #{service_port}".capitalize)
@@ -42,7 +44,7 @@ module ContractVerifier
 
         private
 
-        def handle_for_resource(context, contract, full_schema, service_entries, yaml_file)
+        def handle_for_resource(context, contract, full_schema, service_entries, yaml_file, context_missing_in_schema_url)
           base_path = URI.parse(full_schema['base_url']).request_uri.gsub(/\/+/, '/')
           base_path = '/' + base_path unless base_path.empty?
           base_path = "#{base_path}/" unless base_path.end_with? '/'
@@ -70,7 +72,8 @@ module ContractVerifier
             end
             entry = entry.first
             it("Contract test for #{entry['request']['url']}") do
-              contract.validate entry, context
+              context_path=(context_missing_in_schema_url==false) ? '' : context
+              contract.validate entry, context_path
             end
             entry['in_wadl'] = true
           end

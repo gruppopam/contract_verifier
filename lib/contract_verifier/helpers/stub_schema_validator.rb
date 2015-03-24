@@ -25,10 +25,12 @@ module StubSchemaValidator
           consumer_schema = schema_file_name(entry, key)
           should verify_contract(consumer_schema, consumer_data, key) unless (consumer_schema.nil? or consumer_data.nil?)
         end
+
+        return true if consumer_data.nil?
+
         actual_file_url = entry['request']['url'].gsub('$','').gsub('^','')
 
-
-        actual_file_url.should match_schema consumer_schema
+        actual_file_url.should match_url_in_schema consumer_schema
       end
     end
   end

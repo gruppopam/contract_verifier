@@ -2,7 +2,7 @@ require 'rspec/expectations'
 module Url
   extend self
 
-  RSpec::Matchers.define :match_schema do |schema_file|
+  RSpec::Matchers.define :match_url_in_schema do |schema_file|
     schema_url = JSON.parse(open(schema_file).read)['path']
     match do |url|
       Url.match? schema_url, url

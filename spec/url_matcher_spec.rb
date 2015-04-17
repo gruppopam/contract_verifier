@@ -1,7 +1,7 @@
 require_relative('../lib/contract_verifier/matchers/url_matcher.rb')
 describe Url do
   it "replace_placeholders_with_regex" do
-    expected = /^\/discounts\/supplier\/([a-zA-Z0-9_.-]+)\/([a-zA-Z0-9_.-]+).json$/
+    expected = /^\/discounts\/supplier\/([a-zA-Z0-9,_.-]+)\/([a-zA-Z0-9,_.-]+).json$/
     actual=Url.replace_placeholders_with_regex("/discounts/supplier/{supplier_id}/{article_id}.json")
     expect(expected).to eq actual
   end

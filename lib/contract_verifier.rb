@@ -1,5 +1,6 @@
 require 'rspec/core'
 require "contract_verifier/version"
+require 'yaml'
 Dir[File.join(File.dirname(__FILE__), "contract_verifier/helpers/*.rb")].each { |file| require file }
 Dir[File.join(File.dirname(__FILE__), "contract_verifier/matchers/*.rb")].sort!.each { |file| require file }
 

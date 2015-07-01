@@ -11,6 +11,11 @@ describe Url do
     expect(true).to eq actual
   end
 
+  it "match returns true for valid url with regex and pattern " do
+    actual=Url.match?("/discounts/supplier/{supplier_id}/{article_id}.json","/discounts/supplier/[0-9]+/article_id.json")
+    expect(true).to eq actual
+  end
+
   it "match returns false for invalid url" do
     actual=Url.match?("/discounts/supplier/{supplier_id}/{test}/{article_id}.json","/discounts/supplier/1212/article_id.json")
     expect(false).to eq actual

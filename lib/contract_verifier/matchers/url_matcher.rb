@@ -24,7 +24,7 @@ module Url
   def replace_placeholders_with_regex(pattern)
     place_holders=pattern.scan(/\{(.*?)\}/)
     place_holders.each do |place_holder|
-      pattern.sub!("{#{place_holder[0]}}",'([a-zA-Z0-9,_.-]+)')
+      pattern.sub!("{#{place_holder[0]}}",'([a-zA-Z0-9_.-]+|\[0\-\9\]\+)')
     end
     return /^#{pattern}$/
   end

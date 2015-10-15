@@ -1,4 +1,3 @@
-require 'rspec/core'
 require_relative 'utils'
 
 module ContractSchemaValidator

@@ -14,7 +14,7 @@ module ContractVerifier
       response = response_file || response_body
       if response.nil?
         if entry['request']['method'] == 'GET'
-          raise PendingDeclaredInExample.new("No response file defined")
+          raise SkipDeclaredInExample.new("No response file defined")
         end
       else
         response_body.nil? ? @data_root+"/#{response_file}" : response_body
@@ -25,7 +25,7 @@ module ContractVerifier
       file_name = entry['response']['schema']
       if file_name.nil?
         unless data_file_name_for(entry, key).nil?
-          raise PendingDeclaredInExample.new("Schema Undefined/File not present - #{consumer(entry)}")
+          raise SkipDeclaredInExample.new("Schema Undefined/File not present - #{consumer(entry)}")
         end
       else
         @stub_root+"/#{file_name}"

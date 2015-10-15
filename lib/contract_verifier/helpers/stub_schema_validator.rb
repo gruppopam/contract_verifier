@@ -13,7 +13,6 @@ module StubSchemaValidator
     end
 
     def validate(entry)
-
       begin
         key = 'response'
         consumer_data = data_file_name_for(entry, key)
@@ -34,8 +33,6 @@ module StubSchemaValidator
         actual_file_url.should match_url_in_schema consumer_schema
 
       end
-
     end
-
   end
 end

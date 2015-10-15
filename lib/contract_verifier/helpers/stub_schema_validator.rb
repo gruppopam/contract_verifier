@@ -3,8 +3,8 @@ require_relative 'utils'
 module StubSchemaValidator
   class StubVerifier
     include ContractVerifier::Utils
-    include RSpec::Matchers
-    include RSpec::Core::Pending
+    include ::RSpec::Matchers
+    include ::RSpec::Core::Pending
 
     def initialize(stub_root, data_root)
       @stub_root = stub_root
@@ -12,7 +12,6 @@ module StubSchemaValidator
     end
 
     def validate(entry)
-
       begin
         key = 'response'
         consumer_data = data_file_name_for(entry, key)
@@ -26,10 +25,6 @@ module StubSchemaValidator
           should verify_contract(consumer_schema, consumer_data, key) unless (consumer_schema.nil? or consumer_data.nil?)
         end
       end
-
     end
-
   end
 end
-
-

@@ -4,14 +4,13 @@ require_relative 'utils'
 module ContractSchemaValidator
   class Contract
     include ContractVerifier::Utils
-    include RSpec::Matchers
-    include RSpec::Core::Pending
+    include ::RSpec::Matchers
+    include ::RSpec::Core::Pending
 
     def initialize(stub_root, service_port)
       @stub_root = stub_root
       @service_port = service_port
     end
-
 
     GET = 'GET'
     POST = 'POST'
@@ -59,6 +58,5 @@ module ContractSchemaValidator
       puts "Invalid URL: #{input_url}".bold.red
       raise e
     end
-
   end
 end

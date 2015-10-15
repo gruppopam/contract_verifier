@@ -1,7 +1,6 @@
 module ContractVerifier
   module Utils
-    include RSpec::Core::Pending
-
+    include ::RSpec::Core::Pending
 
     def data_file_name(file_name)
       @data_root+"/#{file_name}"

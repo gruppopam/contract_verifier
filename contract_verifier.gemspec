@@ -28,9 +28,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'hashdiff'
   spec.add_dependency 'rails', '~> 4'
   spec.add_dependency 'colorize'
-  spec.add_dependency 'rspec-rails', '~> 2.14.0'
+  spec.add_dependency 'rspec-rails', '~> 3.3'
   spec.add_dependency 'rspec-core'
   spec.add_dependency 'artii'
-  spec.add_dependency 'sprockets-rails', '~> 2.1.0'
+  spec.add_dependency 'sprockets-rails', '>= 2.1.0', '< 4.0'
 
 end

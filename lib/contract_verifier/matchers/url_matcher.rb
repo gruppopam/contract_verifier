@@ -8,7 +8,7 @@ module Url
       Url.match? schema_url, url
     end
 
-    failure_message_for_should do |url|
+    failure_message do |url|
       "expected url #{url} does not match schema url #{schema_url}. Update schema file in #{schema_file}"
     end
 

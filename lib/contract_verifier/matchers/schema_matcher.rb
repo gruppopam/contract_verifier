@@ -11,7 +11,7 @@ RSpec::Matchers.define :verify_response do |consumer_schema, provider_schema, ht
     result = check_errors(diff)
     result.blank?
   end
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     error_message(provider_schema, consumer_schema, result)
   end
 end
@@ -27,7 +27,7 @@ RSpec::Matchers.define :verify_request do |consumer_schema, provider_schema, htt
     result.blank?
   end
 
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     error_message(provider_schema, consumer_schema, result)
   end
 end

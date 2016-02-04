@@ -1,4 +1,5 @@
 require 'rspec/core'
+require 'colorize'
 require_relative 'utils'
 
 module ContractSchemaValidator
@@ -28,8 +29,6 @@ module ContractSchemaValidator
         end
 
       rescue JSON::ParserError => e
-        puts entry['request']['file'].bold.red
-        puts e.backtrace
         raise e
       end
     end
@@ -41,10 +40,10 @@ module ContractSchemaValidator
       end
       provider_schema = construct_path_for(entry['request']['url'])
       http_method = entry['request']['method']
-      should verify_response(consumer_schema, provider_schema, http_method, @service_port)
+      expect verify_response(consumer_schema, provider_schema, http_method, @service_port)
 
       if http_method == POST || http_method == PUT
-        should verify_request(consumer_schema, provider_schema, http_method, @service_port)
+        expect verify_request(consumer_schema, provider_schema, http_method, @service_port)
       end
       expect("#{JSON.parse(open(consumer_schema).read)['path']}").to eq (entry['request']['url'])
     end
@@ -58,7 +57,7 @@ module ContractSchemaValidator
       end
       "#{input_url}?_wadl"
     rescue => e
-      puts "Invalid URL: #{input_url}".bold.red
+      puts "Invalid URL: #{input_url}".red
       raise e
     end
 

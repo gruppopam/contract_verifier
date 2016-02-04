@@ -31,7 +31,7 @@ module StubSchemaValidator
         return true if entry['request']['url_has_regex']
 
         actual_file_url = entry['request']['url'].gsub('$','').gsub('^','')
-        actual_file_url.expect match_url_in_schema consumer_schema
+        expect to_match_url_in_schema(actual_file_url,consumer_schema)
 
       end
 

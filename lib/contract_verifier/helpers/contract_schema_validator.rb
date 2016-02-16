@@ -40,12 +40,12 @@ module ContractSchemaValidator
       end
       provider_schema = construct_path_for(entry['request']['url'])
       http_method = entry['request']['method']
-      expect verify_response(consumer_schema, provider_schema, http_method, @service_port)
+      should verify_response(consumer_schema, provider_schema, http_method, @service_port)
 
       if http_method == POST || http_method == PUT
-        expect verify_request(consumer_schema, provider_schema, http_method, @service_port)
+        should verify_request(consumer_schema, provider_schema, http_method, @service_port)
       end
-      expect("#{JSON.parse(open(consumer_schema).read)['path']}").to eq (entry['request']['url'])
+      "#{JSON.parse(open(consumer_schema).read)['path']}".should eq(entry['request']['url'])
     end
 
     def construct_path_for(input_url)

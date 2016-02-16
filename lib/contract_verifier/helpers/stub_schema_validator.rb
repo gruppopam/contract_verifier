@@ -18,20 +18,20 @@ module StubSchemaValidator
         key = 'response'
         consumer_data = data_file_name_for(entry, key)
         consumer_schema = schema_file_name(entry, key)
-        expect verify_contract(consumer_schema, consumer_data, key) unless (consumer_schema.nil? or consumer_data.nil?)
+        should verify_contract(consumer_schema, consumer_data, key) unless (consumer_schema.nil? or consumer_data.nil?)
 
         unless entry['request']['method'] == 'GET'
           key = 'request'
           consumer_data = data_file_name_for(entry, key)
           consumer_schema = schema_file_name(entry, key)
-          expect verify_contract(consumer_schema, consumer_data, key) unless (consumer_schema.nil? or consumer_data.nil?)
+          should verify_contract(consumer_schema, consumer_data, key) unless (consumer_schema.nil? or consumer_data.nil?)
         end
 
         return true if consumer_data.nil?
         return true if entry['request']['url_has_regex']
 
         actual_file_url = entry['request']['url'].gsub('$','').gsub('^','')
-        expect to_match_url_in_schema(actual_file_url,consumer_schema)
+        should to_match_url_in_schema(actual_file_url,consumer_schema)
 
       end
 

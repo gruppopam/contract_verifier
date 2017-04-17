@@ -20,12 +20,13 @@ module ContractSchemaValidator
 
     def validate(entry, context)
       begin
-        if entry['request']['file'].is_a?(Hash)
-          entry['request']['file'].each do |key, value|
+        request_file = entry['request']['file']
+        if request_file.is_a?(Hash)
+          request_file.each do |key, value|
             validate_consumer_schema entry, value
           end
         else
-          validate_consumer_schema entry, entry['request']['file']
+          validate_consumer_schema entry, request_file
         end
 
       rescue JSON::ParserError => e

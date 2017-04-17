@@ -15,7 +15,7 @@ module ContractVerifier
           yaml_file = stub_root +'/'+ opts[:yml_file]
           service_port = opts[:service_port]
           context_missing_in_schema_url = opts[:context_missing_in_schema_url]
-          context_missing_in_schema_url= true if context_missing_in_schema_url.nil? == true
+          context_missing_in_schema_url= true if context_missing_in_schema_url.nil?
           contract = ContractSchemaValidator::Contract.new(stub_root, service_port)
           url = "http://localhost:#{service_port}#{context}/?_wadl"
           full_schema = JSON.parse(Net::HTTP.get(URI(url)))
@@ -72,7 +72,7 @@ module ContractVerifier
             end
             entry = entry.first
             it("Contract test for #{entry['request']['url']}") do
-              context_path=(context_missing_in_schema_url==false) ? '' : context
+              context_path=(!context_missing_in_schema_url) ? '' : context
               contract.validate entry, context_path
             end
             entry['in_wadl'] = true

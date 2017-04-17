@@ -37,7 +37,7 @@ module ContractSchemaValidator
     def validate_consumer_schema(entry, schema_file)
       consumer_schema = schema_name schema_file
       unless file_present? consumer_schema
-        raise SkipDeclaredInExample.new("Schema Undefined")
+        fail("Schema file not found: #{schema_file}")
       end
       provider_schema = construct_path_for(entry['request']['url'])
       http_method = entry['request']['method']

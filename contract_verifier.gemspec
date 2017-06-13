@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name = "contract_verifier"
   spec.version = ContractVerifier::VERSION
   spec.authors = ["GruppoPam"]
-  spec.email = ["gruppopam@thoughtworks.com"]
+  spec.email = ["gruppopam -at- thoughtworks =dot= com"]
   spec.summary = ["Contract verifier, verifies the contract against wadl as well as data against contract"]
   spec.description = ["Contract verifier, verifies the contract against wadl as well as data against contract"]
   spec.homepage = ""

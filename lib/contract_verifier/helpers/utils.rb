@@ -14,7 +14,7 @@ module ContractVerifier
       response = response_file || response_body
       if response.nil?
         if entry['request']['method'] == 'GET'
-          raise SkipDeclaredInExample.new("No response file defined")
+          fail("No response file defined")
         end
       else
         response_body.nil? ? @data_root+"/#{response_file}" : response_body

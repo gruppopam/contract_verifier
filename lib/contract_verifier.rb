@@ -1,5 +1,6 @@
 require "contract_verifier/version"
 require 'yaml'
+
 Dir[File.join(File.dirname(__FILE__), "contract_verifier/helpers/*.rb")].each { |file| require file }
 Dir[File.join(File.dirname(__FILE__), "contract_verifier/matchers/*.rb")].sort!.each { |file| require file }
 
@@ -16,6 +17,7 @@ module ContractVerifier
           service_port = opts[:service_port]
           context_missing_in_schema_url = opts[:context_missing_in_schema_url]
           context_missing_in_schema_url= true if context_missing_in_schema_url.nil?
+          @ignore_resources = opts[:ignore_resources] || []
           contract = ContractSchemaValidator::Contract.new(stub_root, service_port)
           url = "http://localhost:#{service_port}#{context}/?_wadl"
           full_schema = JSON.parse(Net::HTTP.get(URI(url)))
@@ -53,7 +55,9 @@ module ContractVerifier
             entry = service_entries.select do |key, hash|
               key["request"]["url"].gsub(/\/+/, '/') == get_url.gsub(/\/+/, '/') and key["request"]["method"] == resource["resource"]["method"]
             end
-            if entry.length > 1
+            if should_ignore_resource(get_url)
+              return
+            elsif entry.length > 1
               it 'Multiple declaration Found' do
                 fail "For request pattern : #{entry.first['request']['url']} in #{yaml_file}"
               end
@@ -87,6 +91,10 @@ module ContractVerifier
               end
             end
           end
+        end
+
+        def should_ignore_resource(url)
+          @ignore_resources.any? {|pattern| Regexp.new(pattern) =~ url}
         end
 
       end
